@@ -26,4 +26,16 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     {
         return $this->model->all();
     }
+
+    public function paginate($params = [])
+    {
+        return $this->model::orderBy('created_at', 'desc')->paginate($params);
+    }
+
+    public function search($params = [])
+    {
+        return $this->model::where('title', 'LIKE', "%{$params['search']}%")
+            ->orWhere('content', 'LIKE', "%{$params['search']}%")
+            ->paginate($params['page'] ?? 15);
+    }
 }
